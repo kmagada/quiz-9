@@ -1,39 +1,40 @@
 name: Docker CI
 
 on:
-    push:
-        branches: [ main, master ]
-    pull_request:
+  push:
+    branches: [ main, master ]
+  pull_request:
 
 jobs:
-    build:
-        runs-on: ubuntu-latest
+  build:
+    runs-on: ubuntu-latest
 
-        steps:
-            - name: Checkout repository
-              uses: actions/checkout@v4
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-            - name: Set up QEMU (for multi-arch support)
-              uses: docker/setup-qemu-action@v2
+      - name: Set up QEMU (for multi-arch support)
+        uses: docker/setup-qemu-action@v2
 
-            - name: Set up Docker Buildx
-              uses: docker/setup-buildx-action@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
 
-            - name: Build Docker image
-              uses: docker/build-push-action@v4
-              with:
-                context: .
-                file: ./Dockerfile
-                push: false
-                tags: test-image:ci
+      - name: Build Docker image (no push)
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: ./Dockerfile
+          push: false
+          tags: test-image:ci
 
-            - name: Run tests inside container
-              run: |
-                    docker run --rm test-image:ci sh -c "\
-                        if command -v pytest >/dev/null 2>&1; then \
-                            pytest -q; \
-                        else \
-                            echo 'No test command detected in container'; exit 1; \
-                        fi"
-                        - name: Build image locally for docker run
-                          run: docker build -f ./Dockerfile -t test-image:ci .
+      - name: Build local image for docker run
+        run: docker build -f ./Dockerfile -t test-image:ci .
+
+      - name: Run tests inside container
+        run: |
+          docker run --rm test-image:ci sh -c "\
+            if command -v pytest >/dev/null 2>&1; then \
+              pytest -q; \
+            else \
+              echo 'No test command detected in container'; exit 1; \
+            fi"
