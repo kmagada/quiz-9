@@ -35,3 +35,5 @@ jobs:
                         else \
                             echo 'No test command detected in container'; exit 1; \
                         fi"
+                        - name: Build image locally for docker run
+                          run: docker build -f ./Dockerfile -t test-image:ci .
