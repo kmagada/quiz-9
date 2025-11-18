@@ -24,13 +24,11 @@ jobs:
               with:
                 context: .
                 file: ./Dockerfile
-                push: false
+                push: true  # Change to true if you want to push the image
                 tags: test-image:ci
 
             - name: Run tests inside container
-            run: |
-                    # Try common test commands inside the built image.
-                    # Edit this block to match your project's test command.
+              run: |
                     docker run --rm test-image:ci sh -c "\
                         if command -v pytest >/dev/null 2>&1; then \
                             pytest -q; \
