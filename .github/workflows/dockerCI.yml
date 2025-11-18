@@ -24,7 +24,7 @@ jobs:
               with:
                 context: .
                 file: ./Dockerfile
-                push: true
+                push: false
                 tags: test-image:ci
 
             - name: Run tests inside container
