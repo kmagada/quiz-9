@@ -15,4 +15,4 @@ def test_count_chars():
 def test_find_most_common_word():
     assert find_most_common_word("apple banana apple orange banana apple") == "apple"
     assert find_most_common_word("one two three two one two") == "two"
-    assert find_most_common_word("") == ""
+    assert find_most_common_word(1800) == ""
